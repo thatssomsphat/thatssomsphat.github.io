@@ -2,30 +2,65 @@
 <html>
 <head>
     <title>Grade Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Grade Calculator</h1>
-    <p>Enter your current grade (out of 100 marks): <input type="number" id="currentGrade" min="0" max="100"></p>
-    <p>Select your desired grade for the remaining 55% component:
+    <div class="container">
+        <h2>Grade Calculator</h2>
+        <label for="currentGrade">Current Grade (out of 100 marks):</label>
+        <input type="number" id="currentGrade" min="0" max="100"><br>
+
+        <label for="desiredGrade">Desired Grade:</label>
         <select id="desiredGrade">
-            <option value="75">A1 (75 marks)</option>
-            <option value="70">A2 (70 marks)</option>
-            <option value="65">B3 (65 marks)</option>
-            <option value="64">B4 (64 marks)</option>
-            <option value="55">C5 (55 marks)</option>
-            <option value="54">C6 (54 marks)</option>
-        </select>
-    </p>
-    <button onclick="calculateMarks()">Calculate Marks</button>
-    <p>Your target marks for the 55% component: <span id="targetMarks"></span></p>
+            <option value="75">A1</option>
+            <option value="70">A2</option>
+            <option value="65">B3</option>
+            <option value="64">B4</option>
+            <option value="55">C5</option>
+            <option value="54">C6</option>
+        </select><br>
+
+        <button onclick="calculateGrade()">Calculate</button><br>
+
+        <p><strong>Marks Needed (out of 100 marks):</strong> <span id="result"></span></p>
+    </div>
 
     <script>
-        function calculateMarks() {
-            const currentGrade = parseFloat(document.getElementById("currentGrade").value);
-            const desiredGrade = parseFloat(document.getElementById("desiredGrade").value);
-            const requiredMarks = ((desiredGrade * 0.55) - (currentGrade * 0.45)) / 0.55;
-            
-            document.getElementById("targetMarks").textContent = requiredMarks.toFixed(2);
+        function calculateGrade() {
+            const currentGrade = parseFloat(document.getElementById('currentGrade').value);
+            const desiredGrade = parseFloat(document.getElementById('desiredGrade').value);
+
+            if (!isNaN(currentGrade) && !isNaN(desiredGrade)) {
+                const marksNeeded = ((desiredGrade * 55) / 100) - ((currentGrade * 45) / 100);
+                document.getElementById('result').textContent = marksNeeded.toFixed(2);
+            } else {
+                alert('Please enter valid numbers for current grade and desired grade.');
+            }
         }
     </script>
 </body>
