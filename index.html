@@ -1,65 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Calculator</title>
-    <style>
-        /* Add your CSS styles here */
-    </style>
 </head>
 <body>
-    <h1>Grade Calculator</h1>
-    <form id="gradeCalculator">
-        <label for="currentGrade">Current Grade (out of 100):</label>
+    <h1>Final Grade Calculator</h1>
+    <form id="gradeCalculatorForm">
+        <label for="currentGrade">Current Grade (%)</label>
         <input type="number" id="currentGrade" min="0" max="100" required>
-        <br>
-        <label for="desiredGrade">Desired Grade:</label>
-        <select id="desiredGrade">
-            <option value="A1">A1</option>
-            <option value="A2">A2</option>
-            <option value="B3">B3</option>
-            <option value="B4">B4</option>
-            <option value="C5">C5</option>
-            <option value="C6">C6</option>
+        
+        <label for="desiredGrade">Desired Grade</label>
+        <select id="desiredGrade" required>
+            <option value="A1">A1 (75 - 100 marks)</option>
+            <option value="A2">A2 (70 - 74 marks)</option>
+            <option value="B3">B3 (65 - 69 marks)</option>
+            <option value="B4">B4 (60 - 64 marks)</option>
+            <option value="C5">C5 (55 - 59 marks)</option>
+            <option value="C6">C6 (50 - 54 marks)</option>
         </select>
-        <br>
-        <button type="button" onclick="calculateMarks()">Calculate</button>
+        
+        <button type="button" onclick="calculateRequiredMarks()">Calculate Required Marks</button>
     </form>
-    <p id="result"></p>
     
+    <div id="result" style="display: none;">
+        <h2>Required Marks to Achieve Desired Grade:</h2>
+        <p id="requiredMarks"></p>
+    </div>
+
     <script>
-        function calculateMarks() {
+        function calculateRequiredMarks() {
             const currentGrade = parseFloat(document.getElementById("currentGrade").value);
             const desiredGrade = document.getElementById("desiredGrade").value;
-            let requiredMarks;
+            
+            const gradeRanges = {
+                "A1": [75, 100],
+                "A2": [70, 74],
+                "B3": [65, 69],
+                "B4": [60, 64],
+                "C5": [55, 59],
+                "C6": [50, 54]
+            };
 
-            // Define grade ranges and calculate required marks
-            switch (desiredGrade) {
-                case "A1":
-                    requiredMarks = ((75 - 45) / 55) * 100;
-                    break;
-                case "A2":
-                    requiredMarks = ((70 - 45) / 55) * 100;
-                    break;
-                case "B3":
-                    requiredMarks = ((65 - 45) / 55) * 100;
-                    break;
-                case "B4":
-                    requiredMarks = ((60 - 45) / 55) * 100;
-                    break;
-                case "C5":
-                    requiredMarks = ((55 - 45) / 55) * 100;
-                    break;
-                case "C6":
-                    requiredMarks = ((50 - 45) / 55) * 100;
-                    break;
-                default:
-                    requiredMarks = 0;
+            if (isNaN(currentGrade)) {
+                alert("Please enter a valid current grade.");
+                return;
             }
 
-            // Display the required marks
-            document.getElementById("result").innerHTML = `You need to score at least ${requiredMarks.toFixed(2)} marks out of 100 for the 55% component to achieve a ${desiredGrade} grade.`;
+            if (!(desiredGrade in gradeRanges)) {
+                alert("Please select a valid desired grade.");
+                return;
+            }
+
+            const [minMarks, maxMarks] = gradeRanges[desiredGrade];
+            const requiredMarks = (((minMarks + maxMarks) / 2) - (0.45 * currentGrade)) / 0.55;
+            
+            document.getElementById("requiredMarks").textContent = `You need to score at least ${requiredMarks.toFixed(2)} out of 100 marks in the remaining component to achieve ${desiredGrade}.`;
+            document.getElementById("result").style.display = "block";
         }
     </script>
 </body>
